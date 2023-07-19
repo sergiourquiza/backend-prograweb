@@ -58,9 +58,9 @@ app.get("/", (req, res) => {
 });
 
 app.post('/api/login', async (req, res) => {
-    const {usuario, contraseña} = req.body;
+    const {username, password} = req.body;
     console.log(req.body);
-    const user = await Usuario.findOne({where: {usuario: usuario, contraseña: contraseña}});
+    const user = await Usuario.findOne({where: {username: username, password: password}});
     if(user){
         res.json({message: 'Login exitoso'});
     }else{
