@@ -57,20 +57,17 @@ app.get("/", (req, res) => {
     res.send("Bienvenido a mi API");
 });
 
-// Route to login page
-app.post("/api/login", (req, res) => {
+app.post('/api/login', async (req, res) => {
     const {usuario, contraseña} = req.body;
     console.log(req.body);
-
-    // Check if the user exists
-    if (usuario === "admin" && contraseña === "123") {
-        res.json({
-            "message": "Inicio de sesion exitoso", 
-        });} else {
-            res.status(401).json({ message: "Usuario o contraseña incorrectos" });
-        } 
+    const user = await Usuario.findOne({where: {usuario: usuario, contraseña: contraseña}});
+    if(user){
+        res.json({message: 'Login exitoso'});
+    }else{
+        res.json({message: 'Usuario o contraseña incorrectos'});
     }
-);
+});
+
 
 app.listen(port, () => {
     console.log(`Activado en el puerto: ${port}`)
