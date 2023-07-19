@@ -3,6 +3,8 @@ import { sequelize } from "./database/database.js";
 import {Usuario} from "./models/Usuario.js";
 import cors from "cors";
 import bodyParser from "body-parser"
+import bcrypt from 'bcryptjs';
+
 
 const app = express()
 app.use(express.json());
@@ -34,6 +36,10 @@ app.get('/crear-usuario/:username/:email/:password/:nombre/:apellido/:tipo_docum
     let numero_documento = req.params.numero_documento
     let rol = req.params.rol
 
+    //Encriptar contraseña
+    const saltRounds = 10; 
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     if(await Usuario.findOne({where: {username: username}}, {where: {email: email}}, {where: {numero_documento: numero_documento}})){
         res.send(`El usuario ya existe`)
     }
@@ -41,7 +47,7 @@ app.get('/crear-usuario/:username/:email/:password/:nombre/:apellido/:tipo_docum
     await Usuario.create({
         username: username,
         email: email,
-        password: password,
+        password: hashedPassword,
         nombre: nombre,
         apellido: apellido,
         tipo_documento: tipo_documento,
@@ -63,17 +69,26 @@ app.get("/", (req, res) => {
 });
 
 app.post('/api/login', async (req, res) => {
-    try{
-    const {username, password} = req.body;
-    console.log(req.body);
-    const user = await Usuario.findOne({where: {username: username, password: password}});
-    if(user){
-        res.json({message: 'Login exitoso'});
-    }else{
-        res.json({message: 'Usuario o contraseña incorrectos'});
-    }
-    }catch(error){
-        res.json({message: 'Servidor caido'});
+    const { username, password } = req.body;
+
+    try {
+        const user = await Usuario.findOne({ where: { username: username } });
+
+        if (!user) {
+            res.json({ message: 'Usuario o contraseña incorrectos' });
+            return;
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (isPasswordValid) {
+            res.json({ message: 'Login exitoso' });
+        } else {
+            res.json({ message: 'Usuario o contraseña incorrectos' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Ha ocurrido un error en el servidor' });
     }
 });
 
