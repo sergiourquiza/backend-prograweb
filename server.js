@@ -34,6 +34,10 @@ app.get('/crear-usuario/:username/:email/:password/:nombre/:apellido/:tipo_docum
     let numero_documento = req.params.numero_documento
     let rol = req.params.rol
 
+    if(await Usuario.findOne({where: {username: username}}, {where: {email: email}}, {where: {numero_documento: numero_documento}})){
+        res.send(`El usuario ya existe`)
+    }
+    else{
     await Usuario.create({
         username: username,
         email: email,
@@ -45,6 +49,7 @@ app.get('/crear-usuario/:username/:email/:password/:nombre/:apellido/:tipo_docum
         rol: rol
     })
     res.send(`Usuario creado satisfactoriamente`)
+    }
 })
 
 app.get('/listar-usuarios', async (req, res) => {
@@ -58,6 +63,7 @@ app.get("/", (req, res) => {
 });
 
 app.post('/api/login', async (req, res) => {
+    try{
     const {username, password} = req.body;
     console.log(req.body);
     const user = await Usuario.findOne({where: {username: username, password: password}});
@@ -65,6 +71,9 @@ app.post('/api/login', async (req, res) => {
         res.json({message: 'Login exitoso'});
     }else{
         res.json({message: 'Usuario o contraseña incorrectos'});
+    }
+    }catch(error){
+        res.json({message: 'Servidor caido'});
     }
 });
 
