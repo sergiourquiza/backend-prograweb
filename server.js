@@ -1,6 +1,9 @@
 import  express  from "express";
 import { sequelize } from "./database/database.js";
-import {Usuario} from "./models/Usuario.js";
+import { Usuario } from "./models/Usuario.js";
+import { Cita } from "./models/Cita.js";
+import { Horario } from "./models/Horario.js";
+import { ProfesorDisp } from "./models/DocentesDisponibles.js";
 import cors from "cors";
 import bodyParser from "body-parser"
 import bcrypt from 'bcryptjs';
