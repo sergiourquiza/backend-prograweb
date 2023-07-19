@@ -6,12 +6,7 @@ import bodyParser from "body-parser"
 
 const app = express()
 app.use(express.json());
-app.use(cors(
-    {
-        origin: 'https://frontend-prograweb-production-fff8.up.railway.app',
-        optionsSuccessStatus: 200
-    }
-));
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
