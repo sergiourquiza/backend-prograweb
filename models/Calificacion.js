@@ -14,7 +14,7 @@ export const Calificacion = sequelize.define("Calificacion", {
         type: DataTypes.STRING,
     },
     rating: {
-        type: DataTypes.INTEGER < 6 && DataTypes.INTEGER > 0,
+        type: DataTypes.INTEGER,
     },
     comment: {
         type: DataTypes.STRING,
