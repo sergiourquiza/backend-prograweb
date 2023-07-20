@@ -4,6 +4,7 @@ import { Usuario } from "./models/Usuario.js";
 import { Cita } from "./models/Cita.js";
 import { Horario } from "./models/Horario.js";
 import { ProfesorDisp } from "./models/DocentesDisponibles.js";
+import { Calificacion } from "./models/Calificacion.js";
 import cors from "cors";
 import bodyParser from "body-parser"
 import bcrypt from 'bcryptjs';
@@ -245,6 +246,42 @@ app.post('/docentes-disponibles', async (req, res) => {
     res.status(500).send("Error al obtener docentes");
   }
 });
+
+app.get('/calificaciones/init', async (req, res) => {
+  try {
+    await Calificacion.bulkCreate([
+      {
+        name: 'Andres',
+        date: '23 de abril de 2021',
+        rating: 5,
+        comment: 'El profesor fue fabuloso'
+      },
+      {
+        name: 'Pepe',
+        date: '21 de abril de 2022',
+        rating: 4,
+        comment: 'El profesor fue muy bueno pero no me dedicaba tiempo'
+      },
+      {
+        name: 'Steven',
+        date: '8 de julio de 2023',
+        rating: 3,
+        comment: 'Se notaba conocimiento pero no lo lograba impartir bien'
+      }
+    ])
+  } catch (e) {
+    res.status(500).send("Error al agregar calificaciones");
+  }
+})
+
+app.get('/calificaciones', async (req, res) => {
+  try {
+    const calificaciones = await Calificacion.findAll();
+    res.send(calificaciones);
+  } catch (e) {
+    res.status(500).send("Error al obtener calificaciones");
+  }
+})
 
 app.listen(port, () => {
     console.log(`Activado en el puerto: ${port}`)

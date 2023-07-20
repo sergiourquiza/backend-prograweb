@@ -9,7 +9,6 @@ export const Calificacion = sequelize.define("Calificacion", {
     },
     id_profesor: {
         type: DataTypes.INTEGER,
-        foreignKey: true,
     },
     name: {
         type: DataTypes.STRING,
