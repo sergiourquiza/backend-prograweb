@@ -23,7 +23,7 @@ const port = process.env.PORT || 3001;
 async function conexionDB() {
     try {
         await sequelize.authenticate();
-        await sequelize.sync({ force: false});
+        await sequelize.sync({ force: true});
         console.log("Conexion exitosa");
     } catch (error) {
         console.log("Error en la conexion");
