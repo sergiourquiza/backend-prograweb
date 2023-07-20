@@ -7,7 +7,8 @@ import { ProfesorDisp } from "./models/DocentesDisponibles.js";
 import cors from "cors";
 import bodyParser from "body-parser"
 import bcrypt from 'bcryptjs';
-
+import { Op } from 'sequelize';
+import diacritics from 'diacritics';
 
 const app = express()
 app.use(express.json());
