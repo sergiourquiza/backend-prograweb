@@ -7,9 +7,6 @@ export const Calificacion = sequelize.define("Calificacion", {
         primaryKey: true,
         autoIncrement: true,
     },
-    id_profesor: {
-        type: DataTypes.INTEGER,
-    },
     name: {
         type: DataTypes.STRING,
     },
